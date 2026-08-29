@@ -48,7 +48,7 @@ services:
     environment:
       # Wins over env_file / image defaults so a host .env cannot flip this.
       NODE_ENV: production
-      # Inside the container; host mapping above is 8791.
+      HOST: 0.0.0.0
       PORT: 8790
       # Host-facing origin for MCP OAuth callbacks (mapped port, not container PORT).
       PUBLIC_BASE_URL: http://localhost:8791

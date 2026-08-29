@@ -348,7 +348,7 @@ export class Sandbox extends LocalToolMCP {
         For large outputs or content that can be generated through code, prefer writing to a file and emitting the sandbox_artifacts block.
 
         Rules:
-        - Use absolute paths, not ~/ or relative paths.
+        - Use absolute paths under /tmp/ (for example /tmp/report.pdf), not / root paths, ~/ paths, or relative paths.
         - One link per line. Markdown link syntax: [label](path).`,
     );
   }
