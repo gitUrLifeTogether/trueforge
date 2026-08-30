@@ -102,11 +102,11 @@ app.post("/mcp", async (req, res) => {
   }
 });
 
-app.get("/health", (_req, res) => {
+app.get("/health", async (_req, res) => {
   res.json({
     status: "ok",
     server: "mcp-trust-cop-target",
-    version: getTargetVersion(),
+    version: await getTargetVersion(),
   });
 });
 
