@@ -1,0 +1,19 @@
+{
+  "name": "mcp-trust-cop-target",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+  "dev": "tsx src/server.ts",
+  "mutate": "tsx scripts/mutate.ts"
+},
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "latest",
+    "express": "latest"
+  },
+  "devDependencies": {
+    "@types/express": "latest",
+    "tsx": "latest",
+    "typescript": "latest"
+  }
+}
