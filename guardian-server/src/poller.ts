@@ -1,4 +1,5 @@
 import { fingerprintTool } from "./fingerprint.js";
+import { auditLog } from "./auditLog.js";
 import {
   approveInitialTool,
   getBaseline,
@@ -99,15 +100,21 @@ async function checkForDrift(): Promise<void> {
       });
 
       await markDriftPending({
-        toolName: tool.name,
-        fingerprint,
-        pendingSchema: snapshot,
-        diff,
-      });
+  toolName: tool.name,
+  fingerprint,
+  pendingSchema: snapshot,
+  diff,
+});
 
-      console.log(
-        `[Guardian]  DRIFT DETECTED: ${tool.name}`,
-      );
+await auditLog("drift_detected", tool.name, {
+  diff,
+  approvedFingerprint: baseline.fingerprint,
+  detectedFingerprint: fingerprint,
+});
+
+console.log(
+  `[Guardian]  DRIFT DETECTED: ${tool.name}`,
+);
       console.log(diff);
     }
   } finally {

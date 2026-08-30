@@ -2,6 +2,7 @@ import {
   getBaseline,
   saveBaseline,
 } from "../baselineStore.js";
+import { auditLog } from "../auditLog.js";
 
 export const approveToolChangeTool = {
   name: "approve_tool_change",
@@ -71,12 +72,17 @@ export async function approveToolChange(
   }
 
   if (decision === "deny") {
-    await saveBaseline(toolName, {
-      ...baseline,
-      status: "blocked_pending_review",
-    });
+  await saveBaseline(toolName, {
+    ...baseline,
+    status: "blocked_pending_review",
+  });
 
-    return {
+  await auditLog("drift_denied", toolName, {
+    diff: baseline.diff ?? "No diff available.",
+    approvedBy: "human",
+  });
+
+  return {
       content: [
         {
           type: "text" as const,
@@ -87,13 +93,18 @@ export async function approveToolChange(
   }
 
   await saveBaseline(toolName, {
-    fingerprint: baseline.fingerprint,
-    approvedAt: new Date().toISOString(),
-    approvedSchema: baseline.pendingSchema,
-    status: "approved",
-  });
+  fingerprint: baseline.fingerprint,
+  approvedAt: new Date().toISOString(),
+  approvedSchema: baseline.pendingSchema,
+  status: "approved",
+});
 
-  return {
+await auditLog("drift_approved", toolName, {
+  diff: baseline.diff ?? "No diff available.",
+  approvedBy: "human",
+});
+
+return {
     content: [
       {
         type: "text" as const,
