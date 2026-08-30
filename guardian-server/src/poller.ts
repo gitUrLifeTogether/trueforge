@@ -22,10 +22,13 @@ function toolSnapshot(tool: {
   };
 }
 
-function createDiff(
-  oldTool: Record<string, unknown>,
-  newTool: Record<string, unknown>,
-): string {
+function createDiff({
+  oldTool,
+  newTool,
+}: {
+  oldTool: Record<string, unknown>;
+  newTool: Record<string, unknown>;
+}): string {
   const changes: string[] = [];
 
   if (oldTool.description !== newTool.description) {
@@ -70,9 +73,9 @@ async function checkForDrift(): Promise<void> {
 
       if (!baseline) {
         await approveInitialTool({
-        toolName: tool.name,
-        fingerprint,
-        toolSchema: snapshot,
+          toolName: tool.name,
+          fingerprint,
+          toolSchema: snapshot,
         });
 
         console.log(
@@ -90,14 +93,17 @@ async function checkForDrift(): Promise<void> {
         continue;
       }
 
-      const diff = createDiff(baseline.approvedSchema, snapshot);
+      const diff = createDiff({
+        oldTool: baseline.approvedSchema,
+        newTool: snapshot,
+      });
 
       await markDriftPending({
         toolName: tool.name,
         fingerprint,
         pendingSchema: snapshot,
         diff,
-        });
+      });
 
       console.log(
         `[Guardian]  DRIFT DETECTED: ${tool.name}`,
