@@ -60,11 +60,15 @@ export async function saveBaseline(
   await writeStore(data);
 }
 
-export async function approveInitialTool(
-  toolName: string,
-  fingerprint: string,
-  toolSchema: Record<string, unknown>,
-): Promise<void> {
+export async function approveInitialTool({
+  toolName,
+  fingerprint,
+  toolSchema,
+}: {
+  toolName: string;
+  fingerprint: string;
+  toolSchema: Record<string, unknown>;
+}): Promise<void> {
   await saveBaseline(toolName, {
     fingerprint,
     approvedAt: new Date().toISOString(),
@@ -73,12 +77,17 @@ export async function approveInitialTool(
   });
 }
 
-export async function markDriftPending(
-  toolName: string,
-  fingerprint: string,
-  pendingSchema: Record<string, unknown>,
-  diff: string,
-): Promise<void> {
+export async function markDriftPending({
+  toolName,
+  fingerprint,
+  pendingSchema,
+  diff,
+}: {
+  toolName: string;
+  fingerprint: string;
+  pendingSchema: Record<string, unknown>;
+  diff: string;
+}): Promise<void> {
   const data = await readStore();
   const existing = data[toolName];
 

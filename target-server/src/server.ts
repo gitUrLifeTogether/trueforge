@@ -106,7 +106,7 @@ app.get("/health", (_req, res) => {
   res.json({
     status: "ok",
     server: "mcp-trust-cop-target",
-    version: "v1",
+    version: getTargetVersion(),
   });
 });
 

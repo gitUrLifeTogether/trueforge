@@ -69,7 +69,11 @@ async function checkForDrift(): Promise<void> {
       const baseline = await getBaseline(tool.name);
 
       if (!baseline) {
-        await approveInitialTool(tool.name, fingerprint, snapshot);
+        await approveInitialTool({
+        toolName: tool.name,
+        fingerprint,
+        toolSchema: snapshot,
+        });
 
         console.log(
           `[Guardian] Initial baseline approved: ${tool.name}`,
@@ -88,15 +92,15 @@ async function checkForDrift(): Promise<void> {
 
       const diff = createDiff(baseline.approvedSchema, snapshot);
 
-      await markDriftPending(
-        tool.name,
+      await markDriftPending({
+        toolName: tool.name,
         fingerprint,
-        snapshot,
+        pendingSchema: snapshot,
         diff,
-      );
+        });
 
       console.log(
-        `[Guardian] 🚨 DRIFT DETECTED: ${tool.name}`,
+        `[Guardian]  DRIFT DETECTED: ${tool.name}`,
       );
       console.log(diff);
     }
